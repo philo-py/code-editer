@@ -3,41 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>コードエディタ</title>
-  <link rel="stylesheet" href="style.css">
+  <title>スマホ対応コードエディタ</title>
+
+  <!-- 外部CSSファイルリンク -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- CodeMirror CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
+
+  <!-- CodeMirror JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/hint/show-hint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/hint/html-hint.min.js"></script>
 </head>
 <body>
   <div class="container">
-    <!-- タブ -->
+    <!-- タブの部分 -->
     <div class="tabs">
       <button class="tab-button active" data-tab="html">HTML</button>
       <button class="tab-button" data-tab="css">CSS</button>
       <button class="tab-button" data-tab="js">JavaScript</button>
     </div>
 
-    <!-- 保存ボタン -->
+    <!-- エディタの部分 -->
+    <div class="editor html-editor active">
+      <textarea id="html-code" placeholder="HTMLコードを書く..."></textarea>
+    </div>
+    <div class="editor css-editor">
+      <textarea id="css-code" placeholder="CSSコードを書く..."></textarea>
+    </div>
+    <div class="editor js-editor">
+      <textarea id="js-code" placeholder="JavaScriptコードを書く..."></textarea>
+    </div>
+
+    <!-- プレビュー部分 -->
+    <iframe id="preview"></iframe>
+
+    <!-- 保存・読み込みボタン -->
     <div class="save-button">
       <button id="save">保存</button>
       <button id="load">読み込み</button>
     </div>
-
-    <!-- コードエディタ -->
-    <div class="editors">
-      <div class="editor" id="html-editor">
-        <textarea id="html-code" placeholder="HTMLコードを書く..."></textarea>
-      </div>
-      <div class="editor" id="css-editor">
-        <textarea id="css-code" placeholder="CSSコードを書く..."></textarea>
-      </div>
-      <div class="editor" id="js-editor">
-        <textarea id="js-code" placeholder="JavaScriptコードを書く..."></textarea>
-      </div>
-    </div>
-
-    <!-- プレビュー -->
-    <iframe id="preview"></iframe>
   </div>
 
+  <!-- JavaScriptファイルリンク -->
   <script src="script.js"></script>
 </body>
 </html>

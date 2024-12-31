@@ -1,42 +1,57 @@
-// エディタの切り替え機能
-const tabButtons = document.querySelectorAll('.tab-button');
-const editors = document.querySelectorAll('.editor');
-const preview = document.getElementById('preview');
+// CodeMirrorの設定
+const htmlEditor = CodeMirror.fromTextArea(document.getElementById('html-code'), {
+  mode: 'htmlmixed',
+  theme: 'dracula',
+  lineNumbers: true,
+  extraKeys: {
+    "Ctrl-Space": "autocomplete" // Ctrl + Spaceで補完
+  }
+});
 
+const cssEditor = CodeMirror.fromTextArea(document.getElementById('css-code'), {
+  mode: 'css',
+  theme: 'dracula',
+  lineNumbers: true,
+  extraKeys: {
+    "Ctrl-Space": "autocomplete"
+  }
+});
+
+const jsEditor = CodeMirror.fromTextArea(document.getElementById('js-code'), {
+  mode: 'javascript',
+  theme: 'dracula',
+  lineNumbers: true,
+  extraKeys: {
+    "Ctrl-Space": "autocomplete"
+  }
+});
+
+// タブの切り替え
+const tabButtons = document.querySelectorAll('.tab-button');
 tabButtons.forEach(button => {
   button.addEventListener('click', () => {
-    // アクティブなタブを切り替える
+    const tab = button.getAttribute('data-tab');
     tabButtons.forEach(btn => btn.classList.remove('active'));
     button.classList.add('active');
 
-    // 表示するエディタを切り替える
-    const targetTab = button.getAttribute('data-tab');
-    editors.forEach(editor => {
-      editor.style.display = editor.id === `${targetTab}-editor` ? 'block' : 'none';
+    // エディタの表示切り替え
+    document.querySelectorAll('.editor').forEach(editor => {
+      if (editor.classList.contains(`${tab}-editor`)) {
+        editor.classList.add('active');
+      } else {
+        editor.classList.remove('active');
+      }
     });
-
-    // プレビューを更新
-    updatePreview();
   });
 });
 
-// 入力内容が変わったらプレビューを更新
-const htmlCode = document.getElementById('html-code');
-const cssCode = document.getElementById('css-code');
-const jsCode = document.getElementById('js-code');
-
-htmlCode.addEventListener('input', updatePreview);
-cssCode.addEventListener('input', updatePreview);
-jsCode.addEventListener('input', updatePreview);
-
-// プレビューを更新する関数
+// プレビュー更新
 function updatePreview() {
-  const html = htmlCode.value;
-  const css = cssCode.value;
-  const js = jsCode.value;
+  const html = htmlEditor.getValue();
+  const css = cssEditor.getValue();
+  const js = jsEditor.getValue();
 
-  const previewDocument = preview.contentWindow.document;
-
+  const previewDocument = document.getElementById('preview').contentWindow.document;
   previewDocument.open();
   previewDocument.write(`
     <!DOCTYPE html>
@@ -59,45 +74,33 @@ function updatePreview() {
   previewDocument.close();
 }
 
+// コード変更時にプレビュー更新
+htmlEditor.on('change', updatePreview);
+cssEditor.on('change', updatePreview);
+jsEditor.on('change', updatePreview);
+
 // 保存機能
 document.getElementById('save').addEventListener('click', () => {
-  const html = htmlCode.value;
-  const css = cssCode.value;
-  const js = jsCode.value;
-
-  localStorage.setItem('htmlCode', html);
-  localStorage.setItem('cssCode', css);
-  localStorage.setItem('jsCode', js);
-  alert('コードが保存されました');
+  const html = htmlEditor.getValue();
+  const css = cssEditor.getValue();
+  const js = jsEditor.getValue();
+  localStorage.setItem('html', html);
+  localStorage.setItem('css', css);
+  localStorage.setItem('js', js);
+  alert('保存しました!');
 });
 
 // 読み込み機能
 document.getElementById('load').addEventListener('click', () => {
-  const savedHtml = localStorage.getItem('htmlCode');
-  const savedCss = localStorage.getItem('cssCode');
-  const savedJs = localStorage.getItem('jsCode');
-
-  if (savedHtml && savedCss && savedJs) {
-    htmlCode.value = savedHtml;
-    cssCode.value = savedCss;
-    jsCode.value = savedJs;
-    updatePreview();
-    alert('保存されたコードが読み込まれました');
+  const html = localStorage.getItem('html');
+  const css = localStorage.getItem('css');
+  const js = localStorage.getItem('js');
+  if (html && css && js) {
+    htmlEditor.setValue(html);
+    cssEditor.setValue(css);
+    jsEditor.setValue(js);
+    alert('読み込みました!');
   } else {
-    alert('保存されたコードがありません');
-  }
-});
-
-// ページ読み込み時に保存されているコードを読み込む
-window.addEventListener('load', () => {
-  const savedHtml = localStorage.getItem('htmlCode');
-  const savedCss = localStorage.getItem('cssCode');
-  const savedJs = localStorage.getItem('jsCode');
-
-  if (savedHtml && savedCss && savedJs) {
-    htmlCode.value = savedHtml;
-    cssCode.value = savedCss;
-    jsCode.value = savedJs;
-    updatePreview();
+    alert('保存されたデータがありません。');
   }
 });
