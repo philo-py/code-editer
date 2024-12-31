@@ -7,10 +7,37 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="editor-container">
-    <textarea  id="editor" placeholder="ここにコードを入力してください。"></textarea>
+  <div class="container">
+    <!-- タブ -->
+    <div class="tabs">
+      <button class="tab-button active" data-tab="html">HTML</button>
+      <button class="tab-button" data-tab="css">CSS</button>
+      <button class="tab-button" data-tab="js">JavaScript</button>
+    </div>
+
+    <!-- 保存ボタン -->
+    <div class="save-button">
+      <button id="save">保存</button>
+      <button id="load">読み込み</button>
+    </div>
+
+    <!-- コードエディタ -->
+    <div class="editors">
+      <div class="editor" id="html-editor">
+        <textarea id="html-code" placeholder="HTMLコードを書く..."></textarea>
+      </div>
+      <div class="editor" id="css-editor">
+        <textarea id="css-code" placeholder="CSSコードを書く..."></textarea>
+      </div>
+      <div class="editor" id="js-editor">
+        <textarea id="js-code" placeholder="JavaScriptコードを書く..."></textarea>
+      </div>
+    </div>
+
+    <!-- プレビュー -->
     <iframe id="preview"></iframe>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
